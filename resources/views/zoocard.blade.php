@@ -29,22 +29,20 @@
         {{$zoocards->links()}}
     @else
         <p>No Bookings found</p>
-        <requester></requester>
+
     @endif
 @endsection
 
 @section('sidebar')
     @parent
     <h3>Create A Booking</h3>
-    <form method="POST" action="/zoocard">
+    <form method="POST" action="{{asset('zoocard')}}">
         {{ csrf_field() }}
 
-        <div class="form-group">
-            <label for="requester">Requester Name :</label>
-            <input type="text" class="form-control" aria-label="Requester" name="requester" id="requester" autocomplete="off">
-        </div>
+
         <div class="form-group">
 
+            <requester></requester>
         </div>
         <div class="form-group">
             <label for="fordate">For Date :</label>

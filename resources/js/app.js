@@ -45,3 +45,9 @@ Vue.component('requester', require('./components/Requester.vue'));
 const app = new Vue({
     el: '#app'
 });
+
+import VueSelect from 'vue-cool-select'
+
+Vue.use(VueSelect, {
+    theme: 'bootstrap' // or 'material-design'
+})

@@ -14,7 +14,6 @@
     "bootstrap": "^4.0.0",
     "popper.js": "^1.12",
     "jquery": "^3.2",
-    "cross-env": "^5.1",
     "laravel-mix": "^2.0",
     "lodash": "^4.17.4",
     "vue": "^2.5.7"
@@ -23,6 +22,7 @@
     "botman-tinker": "^0.0.1",
     "jquery-ui": "^1.12.1",
     "v-autosuggest": "^1.0.1",
-    "vue-cool-select": "^2.10.2"
+    "vue-cool-select": "^2.10.2",
+    "vuejs-datepicker": "^1.5.4"
   }
 }

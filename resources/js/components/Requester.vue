@@ -1,20 +1,26 @@
 <template>
     <div>
-        <div v-if="selected">
-            <img :src="selected.photo" alt="Photo" />
+        <div v-if="selected" class="item">
+            <img :src="'storage/avatars/' + selected.avatar" alt="Photo" width="70px" height="70px" />
             <ul>
                 <li>Name: {{ selected.name }}</li>
-                <li>Email: {{ selected.email }}</li>
+                <li>Dept: - </li>
+                <li>Email: <a :href="'mailto:' + selected.email">{{selected.email}}</a></li>
             </ul>
+            <input type="hidden" name="requester" v-model="selected.id">
         </div>
+
+        <br>
+
         <cool-select
                 v-model="selected"
                 :items="items"
                 :loading="loading"
                 item-text="name"
-                placeholder="Enter user's name"
+                placeholder="Enter employee's name"
                 disable-filtering-by-search
                 @search="onSearch"
+                :input-el-custom-attributes="{ name: 'username'}"
         >
             <template slot="no-data">
                 {{
@@ -25,7 +31,7 @@
             </template>
             <template slot="item" slot-scope="{ item }">
                 <div class="item">
-                    <img :src="item.photo" class="photo" />
+                    <img :src="'storage/avatars/' + item.avatar" class="photo" />
 
                     <div>
                         <span class="item-name"> {{ item.name }} </span> <br />
@@ -40,9 +46,6 @@
 <script>
     import { CoolSelect } from "vue-cool-select";
 
-    Vue.use(CoolSelect, {
-        theme: 'material-design' // or 'material-design'
-    })
     export default {
         components: {
             CoolSelect
@@ -69,7 +72,7 @@
             clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(async () => {
                     const response = await fetch(
-                            `/api/requester?query=${search}`
+                        `api/requester?query=${search}`
                     );
 
             this.items = await response.json();
@@ -77,7 +80,7 @@
 
             if (!this.items.length) this.noData = true;
 
-            console.log(this.items);
+
         }, 500);
         }
     }
@@ -88,6 +91,7 @@
     .item {
         display: flex;
         align-items: center;
+        justify-content: center;
     }
 
     .item-name {

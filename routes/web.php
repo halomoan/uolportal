@@ -30,5 +30,7 @@ Route::group(['middleware' => ['check_user_role:' . \App\Role\UserRole::ROLE_HRD
 });
 
 Route::get('/', 'HomeController@index');
+Route::get('/profile', 'UserController@profile');
+Route::post('/profile', 'UserController@update_avatar');
 Route::get('/dashboard', 'DashboardController@index');
 
