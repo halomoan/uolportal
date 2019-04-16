@@ -96,4 +96,10 @@ class User extends Authenticatable
 
         return $roles;
     }
+
+    public function userProfile()
+    {
+        return $this->hasOne('App\UserProfile');
+    }
+
 }
