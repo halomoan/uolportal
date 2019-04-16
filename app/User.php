@@ -63,7 +63,6 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
-        //dd($this->getRoles());
         return in_array($role, $this->getRoles());
     }
 
@@ -97,9 +96,14 @@ class User extends Authenticatable
         return $roles;
     }
 
-    public function userProfile()
+    public function position()
     {
-        return $this->hasOne('App\UserProfile');
+        return $this->hasOne('App\position','id','id');
+    }
+
+    public function department()
+    {
+        return $this->hasOne(department::class,'id','id');
     }
 
 }

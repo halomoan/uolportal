@@ -34,3 +34,5 @@ Route::get('/profile', 'UserController@profile');
 Route::post('/profile', 'UserController@update_avatar');
 Route::get('/dashboard', 'DashboardController@index');
 
+Route::get('/test', 'TestController@index');
+

@@ -12,12 +12,12 @@
             <!-- Left Side Of Navbar -->
             @auth
             <ul class="navbar-nav mr-auto">
-                @if(App\Role\RoleChecker::check(Auth::user(),App\Role\UserRole::ROLE_HRD))
+                @if( App\Role\RoleChecker::check(Auth::user(),App\Role\UserRole::ROLE_HRD) )
                 <li class="nav-item">
-                    <a class="nav-link" href="{{asset('zoocard')}}">Singapore Zoo <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{asset('zoocard')}}">Singapore Zoo</a>
                 </li>
                 @endif
-                    @if(App\Role\RoleChecker::check(Auth::user(),App\Role\UserRole::ROLE_SAPCC)))
+                    @if(App\Role\RoleChecker::check(Auth::user(),App\Role\UserRole::ROLE_SAPCC))
                 <li class="nav-item">
                     <a class="nav-link" href="{{asset('sapcc')}}">SAPCC</a>
                 </li>

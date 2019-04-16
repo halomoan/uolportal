@@ -20,6 +20,12 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->text('roles')->nullable();
+            $table->char('bukrs',4)->index()->nullable();
+            $table->foreign('bukrs')->references('bukrs')->on('companies');
+            $table->integer('department_id')->unsigned()->index()->nullable();
+            $table->foreign('department_id')->references('id')->on('departments');
+            $table->integer('position_id')->unsigned()->index()->nullable();
+            $table->foreign('position_id')->references('id')->on('positions');
             $table->string('avatar')->default('user.jpg');
             $table->rememberToken();
             $table->timestamps();

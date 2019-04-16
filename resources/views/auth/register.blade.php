@@ -40,6 +40,51 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="role" class="col-md-4 col-form-label text-md-right">Company</label>
+                            <?php
+                            $companies = \App\company::orderBy('bukrs')->get();
+                            ?>
+
+                            <div class="col-md-6">
+                                <select name="role" class="form-control" >
+                                    @foreach ($companies as $company)
+                                        <option value="{{$company->bukrs}}">{{$company->bukrs}} - {{$company->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="role" class="col-md-4 col-form-label text-md-right">Department</label>
+                            <?php
+                            $departments = \App\department::orderBy('name')->get();
+                            ?>
+
+                            <div class="col-md-6">
+                                <select name="role" class="form-control" >
+                                    @foreach ($departments as $department)
+                                        <option value="{{$department->id}}">{{$department->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="role" class="col-md-4 col-form-label text-md-right">Position</label>
+                            <?php
+                            $positions = \App\position::orderBy('name')->get();
+                            ?>
+
+                            <div class="col-md-6">
+                                <select name="role" class="form-control" >
+                                    @foreach ($positions as $position)
+                                        <option value="{{$position->id}}">{{$position->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="role" class="col-md-4 col-form-label text-md-right">Role</label>
                             <?php
                                 $rolelist = \App\Role\UserRole::getRoleList();
