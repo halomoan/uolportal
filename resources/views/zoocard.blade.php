@@ -29,6 +29,7 @@
         {{$zoocards->links()}}
     @else
         <p>No Bookings found</p>
+        <requester></requester>
     @endif
 @endsection
 
@@ -37,14 +38,20 @@
     <h3>Create A Booking</h3>
     <form method="POST" action="/zoocard">
         {{ csrf_field() }}
+
         <div class="form-group">
             <label for="requester">Requester Name :</label>
-            <input type="text" class="form-control" aria-label="Requester" name="requester" autocomplete="off">
+            <input type="text" class="form-control" aria-label="Requester" name="requester" id="requester" autocomplete="off">
+        </div>
+        <div class="form-group">
+
         </div>
         <div class="form-group">
             <label for="fordate">For Date :</label>
-            <input type="text" class="datepicker form-control" aria-label="For Date" name="fordate" autocomplete="off">
+            <bookingdate></bookingdate>
+
         </div>
+
         <button type="submit" class="btn btn-primary">Submit</button>
 
     </form>

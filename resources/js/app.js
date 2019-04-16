@@ -7,7 +7,7 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+/*window.Vue = require('vue');*/
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -15,18 +15,33 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import {TinkerComponent} from 'botman-tinker';
+/*import {TinkerComponent} from 'botman-tinker';
 Vue.component('botman-tinker', TinkerComponent);
 
 const app = new Vue({
     el: '#app'
-});
+});*/
 
-import $ from 'jquery';
+/*import $ from 'jquery';
 window.$ = window.jQuery = $;
 
 import 'jquery-ui/ui/widgets/datepicker.js';
 
+
 $('.datepicker').datepicker(
     { dateFormat: 'DD, d MM, yy' }
 );
+
+import 'jquery-ui/ui/widgets/autocomplete.js';
+*/
+
+//import axios from 'axios';
+window.Vue = require('vue');
+//window.axios = axios;
+
+Vue.component('bookingdate', require('./components/BookingDate.vue'));
+Vue.component('requester', require('./components/Requester.vue'));
+
+const app = new Vue({
+    el: '#app'
+});

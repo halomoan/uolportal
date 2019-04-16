@@ -30,9 +30,12 @@ class HelpConversation  extends Conversation
             $value = $answer->getValue();
 
             if ( ! in_array($value,$this->helplist) ){
-                   return $this->repeat('I dont know');
+
+                $this->say('I cannot help on that. Please pick one from the list on below.');
+
+                return $this->repeat();
             }
-            $this->say('You selected : ' . $answer->getValue());
+            //$this->say('You selected : ' . $answer->getValue());
         });
 
     }

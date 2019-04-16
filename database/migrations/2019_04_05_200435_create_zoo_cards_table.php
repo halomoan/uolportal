@@ -14,11 +14,12 @@ class CreateZooCardsTable extends Migration
     public function up()
     {
         Schema::create('zoo_cards', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('requester');
+            $table->integer('user_id')->unsigned();
             $table->date('fordate');
             $table->char('status',1);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+            $table->primary(['user_id','fordate']);
         });
     }
 

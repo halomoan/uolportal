@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','roles'
     ];
 
     /**
@@ -63,7 +63,7 @@ class User extends Authenticatable
      */
     public function hasRole($role)
     {
-
+        //dd($this->getRoles());
         return in_array($role, $this->getRoles());
     }
 
@@ -87,7 +87,8 @@ class User extends Authenticatable
      */
     public function getRoles()
     {
-        $roles = $this->getAttribute('roles');
+        $roles = \GuzzleHttp\json_decode($this->getAttribute('roles'));
+
 
         if (is_null($roles)) {
             $roles = [];

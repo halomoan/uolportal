@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "botman-tinker": "^0.0.1",
-    "jquery-ui": "^1.12.1"
+    "jquery-ui": "^1.12.1",
+    "v-autosuggest": "^1.0.1",
+    "vue-cool-select": "^2.10.2"
   }
 }

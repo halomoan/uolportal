@@ -40,6 +40,21 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="role" class="col-md-4 col-form-label text-md-right">Role</label>
+                            <?php
+                                $rolelist = \App\Role\UserRole::getRoleList();
+                            ?>
+
+                            <div class="col-md-6">
+                                <select name="role" class="form-control" >
+                                    @foreach ($rolelist as $key=>$role)
+                                        <option value="{{$key}}">{{$role}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
