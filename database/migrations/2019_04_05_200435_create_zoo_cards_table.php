@@ -17,7 +17,7 @@ class CreateZooCardsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->date('fordate');
             $table->char('status',1);
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
             $table->primary(['user_id','fordate']);
         });

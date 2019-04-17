@@ -27,8 +27,14 @@ class ZooCardController extends Controller
     {
         //$zoocards = Zoocard::All();
         //$zoocards = Zoocard::orderBy('fordate')->paginate(2);
+
+        //$zoocards = Zoocard::where('fordate','>=', $today)->orderBy('fordate')->paginate(2);
         $today = date('Y-m-d');
-        $zoocards = Zoocard::where('fordate','>=', $today)->orderBy('fordate')->paginate(2);
+        $zoocards = ZooCard::join('users',function($join) use($today){
+           $join->on('users.id','=','zoo_cards.user_id')
+               ->where('fordate','>=', $today)->orderBy('fordate');
+        })->paginate(2);
+
         return view('zoocard')->with('zoocards',$zoocards);
     }
 
@@ -57,7 +63,7 @@ class ZooCardController extends Controller
 
         $zoocard = new ZooCard;
 
-        $zoocard->requester = $request->input('requester');
+        $zoocard->user_id = $request->input('requester');
 
         $fordate = \DateTime::createFromFormat("D, d M, yy", $request->input('fordate'));
         if ($fordate) {
@@ -91,13 +97,15 @@ class ZooCardController extends Controller
      */
     public function edit($id)
     {
-        $zoocard = Zoocard::find($id);
+        $zoocard = Zoocard::where('user_id','=',$id)->firstOrFail();
+
         if ($zoocard->status == 'C') {
             $zoocard->status = '';
         } else {
             $zoocard->status = 'C';
         }
         $zoocard->save();
+
         $zoocards = Zoocard::orderBy('fordate')->paginate(2);
         return redirect('zoocard')->with('zoocards',$zoocards);
     }

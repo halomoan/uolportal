@@ -60,6 +60,10 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|in:' . $roles,
+            'bukrs' => 'required',
+            'department' => 'required',
+            'position' => 'required',
+
         ]);
     }
 
@@ -74,11 +78,19 @@ class RegisterController extends Controller
 
         $role = json_encode(array($data['role']));
 
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'roles' => $role,
         ]);
+
+        $user->userProfile()->save( new \App\UserProfile( array(
+            'bukrs' =>  $data['bukrs'],
+            'department_id' => $data['department'],
+            'position_id' => $data['position']
+        )));
+
+        return $user;
     }
 }

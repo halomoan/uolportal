@@ -6,17 +6,18 @@
 
             <div class="card">
                 <div class="card-body">
-                <h4 class="card-title"> Booked by {{$zoocard->requester}} </h4>
-                <h6 class="card-subtitle mb-2 text-muted">On {{$zoocard->created_at->format('d/M/y')}}</h6>
+                <h4 class="card-title"> Booked by {{$zoocard->name}} </h4>
+                <div class="card-subtitle mb-3 text-muted"><small>On {{$zoocard->created_at->format('d/M/y')}}</small></div>
+
                 <div class="row">
                         <div class="col-8">
-                            <p>For {{$zoocard->fordate->format("D, d M, Y")}}</p>
+                            <h5>For: <b>{{$zoocard->fordate->format("D, d M, Y")}}</b></h5>
                         </div>
                         <div class="col-4">
                             @if($zoocard->status == 'C')
-                                <a href="/zoocard/{{$zoocard->id}}/edit" class="btn btn-primary float-right">Reinstate Booking</a>
+                                <a href="{{asset('zoocard')}}/{{$zoocard->user_id}}/edit" class="btn btn-primary float-right">Reinstate Booking</a>
                             @else
-                                <a href="/zoocard/{{$zoocard->id}}/edit" class="btn btn-danger float-right">Cancel Booking</a>
+                                <a href="{{asset('zoocard')}}/{{$zoocard->user_id}}/edit" class="btn btn-danger float-right">Cancel Booking</a>
                             @endif
                         </div>
                     </div>
@@ -42,7 +43,7 @@
 
         <div class="form-group">
 
-            <requester></requester>
+            <selectuser></selectuser>
         </div>
         <div class="form-group">
             <label for="fordate">For Date :</label>

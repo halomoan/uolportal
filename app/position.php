@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class position extends Model
 {
-    public function user()
+    public function userprofile()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(UserProfile::class);
     }
 }

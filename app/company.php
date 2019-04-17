@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class company extends Model
 {
-    public function user()
+    public function userprofile()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(UserProfile::class);
     }
+
 }

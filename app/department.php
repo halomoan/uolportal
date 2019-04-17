@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class department extends Model
 {
 
-    public function user()
+    public function userprofile()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(userprofile::class);
     }
 }

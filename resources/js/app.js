@@ -40,7 +40,7 @@ window.Vue = require('vue');
 //window.axios = axios;
 
 Vue.component('bookingdate', require('./components/BookingDate.vue'));
-Vue.component('requester', require('./components/Requester.vue'));
+Vue.component('selectuser', require('./components/SelectUser.vue'));
 
 const app = new Vue({
     el: '#app'

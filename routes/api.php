@@ -15,12 +15,29 @@ use Illuminate\Support\Facades\Input;
 |
 */
 
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/requester',function(){
+Route::middleware('auth:api')->get('/requester',function(){
     $query = Input::get('query');
     $users = User::where('name','like','%'.$query.'%')->get();
-    return response()->json($users);
+
+    $data = [];
+
+    foreach($users as $user){
+
+        $data[] = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatar' => $user->userprofile->avatar,
+            'bukrs' => $user->userprofile->bukrs,
+            'company' => $user->userprofile->company->name,
+            'department' => $user->userprofile->department->name,
+            'position' => $user->userprofile->position->name,
+        ];
+    }
+    return response()->json($data);
 });

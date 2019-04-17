@@ -46,7 +46,7 @@
                             ?>
 
                             <div class="col-md-6">
-                                <select name="role" class="form-control" >
+                                <select name="bukrs" class="form-control" >
                                     @foreach ($companies as $company)
                                         <option value="{{$company->bukrs}}">{{$company->bukrs}} - {{$company->name}}</option>
                                     @endforeach
@@ -61,7 +61,7 @@
                             ?>
 
                             <div class="col-md-6">
-                                <select name="role" class="form-control" >
+                                <select name="department" class="form-control" >
                                     @foreach ($departments as $department)
                                         <option value="{{$department->id}}">{{$department->name}}</option>
                                     @endforeach
@@ -76,7 +76,7 @@
                             ?>
 
                             <div class="col-md-6">
-                                <select name="role" class="form-control" >
+                                <select name="position" class="form-control" >
                                     @foreach ($positions as $position)
                                         <option value="{{$position->id}}">{{$position->name}}</option>
                                     @endforeach

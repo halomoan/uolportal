@@ -1,10 +1,10 @@
 <template>
     <div>
         <div v-if="selected" class="item">
-            <img :src="'storage/avatars/' + selected.avatar" alt="Photo" width="70px" height="70px" />
+            <img :src="'storage/avatars/' + selected.avatar" alt="Photo" width="70px" height="80px" />
             <ul>
                 <li>Name: {{ selected.name }}</li>
-                <li>Dept: - </li>
+                <li>Dept: {{ selected.department }}</li>
                 <li>Email: <a :href="'mailto:' + selected.email">{{selected.email}}</a></li>
             </ul>
             <input type="hidden" name="requester" v-model="selected.id">
@@ -25,7 +25,7 @@
             <template slot="no-data">
                 {{
                 noData
-                ? "No information found by request."
+                ? "No information found."
                 : "We need at least 2 letters to search."
                 }}
             </template>
@@ -35,7 +35,7 @@
 
                     <div>
                         <span class="item-name"> {{ item.name }} </span> <br />
-                        <span class="item-email"> {{ item.email }} </span>
+                        <span class="item-text"> {{ item.department }} </span>
                     </div>
                 </div>
             </template>
@@ -91,7 +91,6 @@
     .item {
         display: flex;
         align-items: center;
-        justify-content: center;
     }
 
     .item-name {
