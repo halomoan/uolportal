@@ -71,17 +71,17 @@
 
             clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(async () => {
-                    const response = await fetch(
-                        `api/requester?query=${search}`
-                    );
 
-            this.items = await response.json();
-            this.loading = false;
+                const response = await axios.get('api/requester',{params: {query: search}})
 
-            if (!this.items.length) this.noData = true;
+                this.items =  await response.data;
+
+                this.loading = false;
+
+                if (!this.items.length) this.noData = true;
 
 
-        }, 500);
+            }, 500);
         }
     }
     };

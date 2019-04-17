@@ -35,9 +35,19 @@ $('.datepicker').datepicker(
 import 'jquery-ui/ui/widgets/autocomplete.js';
 */
 
-//import axios from 'axios';
+
 window.Vue = require('vue');
+import axios from 'axios';
 //window.axios = axios;
+
+axios.defaults.headers.common = {
+    'X-CSRF-TOKEN': Laravel.csrfToken,
+    'X-Requested-With': 'XMLHttpRequest',
+    'Authorization': 'Bearer ' + Laravel.apiToken,
+};
+
+window.Vue.prototype.$http = axios;
+
 
 Vue.component('bookingdate', require('./components/BookingDate.vue'));
 Vue.component('selectuser', require('./components/SelectUser.vue'));

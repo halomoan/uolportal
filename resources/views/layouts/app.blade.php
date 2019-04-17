@@ -20,27 +20,31 @@
         @include('inc.navbar')
 
         <div class="container">
-        @if(Request::is('/'))
-                @include('inc.showcase')
-        @endif
+            @if(Request::is('/'))
+                    @include('inc.showcase')
+            @endif
 
-        @if(Request::is('zoocard'))
+            @if(Request::is('zoocard'))
 
-             <div class="row">
-                 <div class="col-md-8 col-lg-8">
-                     <br>
-                     @include('inc.message')
-                     @yield('content')
+                 <div class="row">
+                     <div class="col-md-8 col-lg-8">
+                         <br>
+                         @include('inc.message')
+                         @yield('content')
+                     </div>
+                     <div class="col-md-4 col-lg-4">
+                         @include('inc.sidebar')
+                     </div>
                  </div>
-                 <div class="col-md-4 col-lg-4">
-                     @include('inc.sidebar')
-                 </div>
-             </div>
-        @else
-            <br>
-            @include('inc.message')
-            @yield('content')
-        @endif
+            @else
+                <br>
+                @include('inc.message')
+                @yield('content')
+            @endif
+            <footer class="row">
+                @include('inc.footer')
+            </footer>
+
         </div>
     </div>
     <!-- Scripts -->

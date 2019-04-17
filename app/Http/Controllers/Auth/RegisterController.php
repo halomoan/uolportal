@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Role\UserRole;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -83,6 +84,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'roles' => $role,
+            'api_token' => hash('sha256', Str::random(60)),
         ]);
 
         $user->userProfile()->save( new \App\UserProfile( array(

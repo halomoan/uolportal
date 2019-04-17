@@ -30,7 +30,7 @@
 
             <div class="card" style="width: 18rem;">
 
-                <img class="card-img-top" src="storage/avatars/{{ $user->avatar }}" />
+                <img class="card-img-top" src="storage/avatars/{{ $user->userprofile->avatar }}" />
                 <div class="card-body">
                     <h4 class="card-title">{{$user->name}}</h4>
 
