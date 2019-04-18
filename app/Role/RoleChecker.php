@@ -16,9 +16,12 @@ class RoleChecker
      * @param string $role
      * @return bool
      */
-    public static function check(User $user, string $role)
+    public static function check($user, $role)
     {
 
+        if (! $user instanceOf User) {
+            return false;
+        }
         // Admin has everything
         if ($user->hasRole(UserRole::ROLE_ADMIN)) {
             return true;

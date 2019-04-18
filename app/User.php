@@ -101,5 +101,9 @@ class User extends Authenticatable
         return $this->hasOne('App\userprofile');
     }
 
+    public function ZooCards()
+    {
+        return $this->hasMany('App\zoocard');
+    }
 
 }

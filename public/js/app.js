@@ -50555,7 +50555,7 @@ exports = module.exports = __webpack_require__(49)(false);
 
 
 // module
-exports.push([module.i, "\n.item {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.item-name {\n    font-size: 25px;\n}\n.item-email {\n    color: grey;\n}\n.photo {\n    max-width: 60px;\n    margin-right: 10px;\n    border: 1px solid #eaecf0;\n}\n", ""]);
+exports.push([module.i, "\n.item {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.item-name {\n    font-size: 16px;\n}\n.item-text {\n    font-size: 12px;\n}\n.item-email {\n    color: grey;\n}\n.photo {\n    max-width: 60px;\n    margin-right: 10px;\n    border: 1px solid #eaecf0;\n}\n", ""]);
 
 // exports
 

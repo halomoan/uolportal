@@ -3,28 +3,31 @@
     <h1>Singapore Zoo Card Booking</h1>
     @if(count($zoocards) > 0)
         @foreach($zoocards as $zoocard)
+<br>
+            <div class="p-3 border border-info rounded bg-white">
+            <div class="media" >
+                <div class="media-left">
+                    <a href="#">
+                        <img class="align-self-center mr-3"  src="{{'storage/avatars/' . $zoocard->userprofile[0]->avatar}}" alt="photo" width="80px" height="90px">
+                    </a>
+                </div>
+                <div class="media-body">
+                     <h4 class="mt-0 mb-0">Reserved by {{$zoocard->name}}  </h4> <small >On {{$zoocard->created_at->format('d/M/y')}}</small>
 
-            <div class="card">
-                <div class="card-body">
-                <h4 class="card-title"> Booked by {{$zoocard->name}} </h4>
-                <div class="card-subtitle mb-3 text-muted"><small>On {{$zoocard->created_at->format('d/M/y')}}</small></div>
 
-                <div class="row">
-                        <div class="col-8">
-                            <h5>For: <b>{{$zoocard->fordate->format("D, d M, Y")}}</b></h5>
-                        </div>
-                        <div class="col-4">
+
+                    <div class="float-right">
                             @if($zoocard->status == 'C')
-                                <a href="{{asset('zoocard')}}/{{$zoocard->user_id}}/edit" class="btn btn-primary float-right">Reinstate Booking</a>
+                                <a  href="{{asset('zoocard')}}/{{$zoocard->user_id}}/edit" class="btn btn-primary float-right">Reinstate Booking</a>
                             @else
-                                <a href="{{asset('zoocard')}}/{{$zoocard->user_id}}/edit" class="btn btn-danger float-right">Cancel Booking</a>
+                                <a  href="{{asset('zoocard')}}/{{$zoocard->user_id}}/edit" class="btn btn-danger float-right">Cancel Booking</a>
                             @endif
-                        </div>
+
                     </div>
+                    <p>For: <b>{{$zoocard->fordate->format("D, d M, Y")}}</b></p>
                 </div>
             </div>
-            <br>
-
+            </div>
         @endforeach
 
         {{$zoocards->links()}}

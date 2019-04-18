@@ -94,8 +94,13 @@
     }
 
     .item-name {
-        font-size: 25px;
+        font-size: 16px;
     }
+
+    .item-text {
+        font-size: 12px;
+    }
+
     .item-email {
         color: grey;
     }

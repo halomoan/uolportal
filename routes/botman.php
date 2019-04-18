@@ -1,7 +1,4 @@
 <?php
-use App\Http\Controllers\BotManController;
-
-
 
 $botman = resolve('botman');
 
@@ -22,11 +19,15 @@ $botman->hears('help[s]?$', function ($bot) {
 
 
 $botman->hears('hrd',function($bot) {
-    $bot->startConversation(new \App\Conversations\HRDConversation());
+    $bot->startConversation(new \App\Conversations\HRConversation());
 });
 
 $botman->hears('exit|stop|quit|bye', function($bot){
-   $bot->reply('We stopped your conversation. How can I help you ?');
+   $bot->reply('Ok. We stop our conversation.');
 })->stopsConversation();
 
+
+$botman->hears('cancel', function($bot){
+    $bot->reply('Ok. The request has been cancelled');
+})->stopsConversation();
 

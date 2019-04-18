@@ -25,15 +25,16 @@ class ZooCardController extends Controller
      */
     public function index()
     {
-        //$zoocards = Zoocard::All();
-        //$zoocards = Zoocard::orderBy('fordate')->paginate(2);
 
-        //$zoocards = Zoocard::where('fordate','>=', $today)->orderBy('fordate')->paginate(2);
         $today = date('Y-m-d');
         $zoocards = ZooCard::join('users',function($join) use($today){
            $join->on('users.id','=','zoo_cards.user_id')
-               ->where('fordate','>=', $today)->orderBy('fordate');
-        })->paginate(2);
+               ->where('fordate','>=', $today);
+        })->orderBy('fordate')->paginate(2);
+
+       /* $zoocards = User::whereHas('zoocards',function($query) use($today) {
+              $query->where('fordate','>=', $today)->orderBy('fordate');
+        })->paginate(2);;*/
 
         return view('zoocard')->with('zoocards',$zoocards);
     }

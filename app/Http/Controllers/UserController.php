@@ -30,8 +30,8 @@ class UserController extends Controller
 
         $request->avatar->storeAs('avatars',$avatarName);
 
-        $user->avatar = $avatarName;
-        $user->save();
+        $user->userprofile->avatar = $avatarName;
+        $user->userprofile->save();
 
         return back()
             ->with('success','You have successfully upload image.');
