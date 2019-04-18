@@ -12,10 +12,8 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Exception;
-use Carbon\Carbon;
 use App\ZooCard;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class HRConversation  extends Conversation
 {
@@ -53,18 +51,20 @@ class HRConversation  extends Conversation
 
         $this->ask('For Singapore Zoo Booking, What is the date?',function($answer){
 
-            //$usersay = $answer->getText();
+            $usersay = $answer->getText();
 
 
-            $value = preg_replace('/\s+|-+|\/+/', ' ',  $answer->getText());
+            $value = preg_replace('/\s+|-+|\/+/', ' ',  $usersay);
 
             $this->fordate = $this->validateDate($value);
 
             if(!$this->fordate){
-                return $this->repeat('Invalid date. Please enter a valid date, like ' . Carbon::now()->format('d M Y'));
+                return $this->repeat('Invalid date. Please enter a valid date, like ' . date('d M Y'));
             }
 
-            $zoocards = Zoocard::where('fordate','=', $this->fordate->toDateString())->where('status','=','')->first();
+
+
+            $zoocards = Zoocard::where('fordate','=', date('Y-m-d',$this->fordate))->where('status','=','')->first();
 
             if ($zoocards) {
                 $this->say('The Singapore Zoo card had been reserved by ' . $zoocards->user->name);
@@ -72,14 +72,13 @@ class HRConversation  extends Conversation
             } else {
                 // $this->getBot()->typesAndWaits(2);
 
-                Log::debug($this->fordate);
-                $this->ask('You choose ' . $this->fordate->format('D , d M Y'),function($answer){
+                $this->ask('You choose ' . date('D, d m Y',$this->fordate) . '.Please type \'confirm\' to do confirmation', function($answer){
 
-                    if (true) {
-                        Zoocard::create(['user_id' => Auth::User()->id, 'fordate' => $this->fordate->toDateString()]);
+                    if ($answer->getText() == 'confirm') {
+                        Zoocard::create(['user_id' => Auth::User()->id, 'fordate' => date('Y-m-d',$this->fordate), 'status' => '']);
 
 
-                        $this->say('Thank you, You have successfully booked the Singapore Zoo Card on ' . $this->fordate->format('D , d M Y'));
+                        $this->say('Thank you, You have successfully booked the Singapore Zoo Card on ' . date('D, d m Y',$this->fordate));
                     } else {
                         $this->repeat("Type 'confirm' to confirm or 'cancel' to cancel");
                     }
@@ -98,23 +97,11 @@ class HRConversation  extends Conversation
 
 
         try {
-            //$d = $carbon::createFromFormat('d M Y',$value);
-            $carbon = new Carbon($value);
-            return $carbon;
+            $timestamp = strtotime($value);
+            return $timestamp;
         } catch (Exception $e) {
-
 
         }
-
-
-       /* try {
-            $d =  Carbon::parse($value);
-
-            return $d;
-        } catch (Exception $e) {
-
-        }*/
-
         return false;
     }
 
