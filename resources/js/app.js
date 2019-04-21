@@ -40,6 +40,7 @@ window.Vue = require('vue');
 import axios from 'axios';
 //window.axios = axios;
 
+
 axios.defaults.headers.common = {
     'X-CSRF-TOKEN': Laravel.csrfToken,
     'X-Requested-With': 'XMLHttpRequest',
@@ -48,6 +49,8 @@ axios.defaults.headers.common = {
 
 window.Vue.prototype.$http = axios;
 
+import {TinkerComponent} from 'botman-tinker';
+Vue.component('botman-tinker', TinkerComponent);
 
 Vue.component('bookingdate', require('./components/BookingDate.vue'));
 Vue.component('selectuser', require('./components/SelectUser.vue'));

@@ -2,7 +2,7 @@
 
 $botman = resolve('botman');
 
-$botman->hears('Hi|Hello (.*)', function ($bot) {
+$botman->hears('(Hi)|(Hello)|(Helo)', function ($bot) {
     $username = Auth::user()->name;
     $bot->reply('Hello '. $username . '! How can I help you?');
 });
@@ -18,7 +18,7 @@ $botman->hears('help[s]?$', function ($bot) {
 });
 
 
-$botman->hears('hrd',function($bot) {
+$botman->hears('hr|about hr',function($bot) {
     $bot->startConversation(new \App\Conversations\HRConversation());
 });
 

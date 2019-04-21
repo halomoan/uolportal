@@ -9,6 +9,7 @@
 namespace App\Conversations;
 
 use BotMan\BotMan\Messages\Conversations\Conversation;
+use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 
@@ -39,4 +40,16 @@ class HelpConversation  extends Conversation
         });
 
     }
+
+    public function stopsConversation(IncomingMessage $message)
+    {
+        $usersay = $message->getText();
+
+        if (in_array($usersay,$this->helplist)) {
+            return true;
+        }
+
+        return false;
+    }
+
 }

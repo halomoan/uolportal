@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\ZooCard;
+use Illuminate\Support\MessageBag;
 
 class ZooCardController extends Controller
 {
@@ -27,14 +29,16 @@ class ZooCardController extends Controller
     {
 
         $today = date('Y-m-d');
-        $zoocards = ZooCard::join('users',function($join) use($today){
+        $zoocards = Zoocard::orderBy('fordate')->paginate(3);
+        /*$zoocards = ZooCard::join('users',function($join) use($today){
            $join->on('users.id','=','zoo_cards.user_id')
                ->where('fordate','>=', $today);
-        })->orderBy('fordate')->paginate(2);
+        })->orderBy('fordate')->paginate(3);*/
 
        /* $zoocards = User::whereHas('zoocards',function($query) use($today) {
               $query->where('fordate','>=', $today)->orderBy('fordate');
         })->paginate(2);;*/
+
 
         return view('zoocard')->with('zoocards',$zoocards);
     }
@@ -62,21 +66,43 @@ class ZooCardController extends Controller
             'fordate' => 'required'
         ]);
 
+        $fordate = \DateTime::createFromFormat("D, d M, yy", $request->input('fordate'));
+        if (!$fordate) {
+            return redirect()->back()->with('error','Invalid date');
+        } elseif($fordate < (new \DateTime(date('d-m-y'))) ) {
+
+            return redirect()->back()->with('error','Please select future date');
+        }
+
+        //Someone reserved the zoo card on the same date
+        if (Zoocard::where('fordate', '=', $fordate->format("Y-m-d"))->exists()) {
+            return redirect()->back()->with('error','Someone has reserved the zoo card on that date');
+        }
+
         $zoocard = new ZooCard;
 
         $zoocard->user_id = $request->input('requester');
+        $zoocard->fordate = $fordate->format("Y-m-d");
 
-        $fordate = \DateTime::createFromFormat("D, d M, yy", $request->input('fordate'));
-        if ($fordate) {
-            $zoocard->fordate = $fordate->format("Y-m-d");
-        }
 
         $zoocard->status = '';
 
-        $zoocard->save();
+        try {
+            $zoocard->save();
+        } catch (QueryException $e) {
+            $error = $e->errorInfo;
 
-        $zoocards = Zoocard::orderBy('fordate')->paginate(2);
-        return redirect('zoocard')->with('zoocards',$zoocards);
+
+            if ($error[0] == '23000'){
+                return redirect()->back()->with('error','The card has been reserved.');
+            } else {
+                return redirect()->back()->with('error','An error has occurred when saving the data');
+
+            }
+        }
+
+
+        return redirect()->back()->with('success','Reserved successfully');;
     }
 
     /**
@@ -98,17 +124,23 @@ class ZooCardController extends Controller
      */
     public function edit($id)
     {
-        $zoocard = Zoocard::where('user_id','=',$id)->firstOrFail();
+        $zoocard = Zoocard::findOrFail($id);
+
 
         if ($zoocard->status == 'C') {
-            $zoocard->status = '';
+
+            if (Zoocard::where('fordate', '=', $zoocard->fordate)->where('status','=','')->exists()) {
+                return redirect()->back()->with('error','The card has been reserved by ' . $zoocard->user->name . ' on the same date.');
+            }else {
+                $zoocard->status = '';
+            }
         } else {
             $zoocard->status = 'C';
         }
         $zoocard->save();
 
-        $zoocards = Zoocard::orderBy('fordate')->paginate(2);
-        return redirect('zoocard')->with('zoocards',$zoocards);
+        return redirect()->back()->with('success','Updated successfully');
+
     }
 
     /**

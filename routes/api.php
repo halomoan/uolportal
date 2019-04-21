@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Input;
 
 Route::group(['middleware' => ['auth:api']], function () {
 
-    /*Route::get('/user', function (Request $request) {
+    /*chat.jsRoute::get('/user', function (Request $request) {
         return $request->user();
     });*/
 

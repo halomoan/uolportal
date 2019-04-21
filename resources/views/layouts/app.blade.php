@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'UOLPortal') }}</title>
 
 
     <!-- Styles -->
@@ -48,6 +48,14 @@
         </div>
     </div>
     <!-- Scripts -->
+
+    <script>
+        window.Laravel = {!! json_encode([
+       'csrfToken' => csrf_token(),
+       'apiToken' =>  Auth::User()->api_token  ?? null,
+       ]) !!};
+    </script>
+
     <script src="{{ asset('js/app.js') }}" defer></script>
     @if(auth()->check())
         @include('inc.javascript')
