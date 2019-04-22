@@ -86,6 +86,7 @@ class HRConversation  extends Conversation
 
 
     private function checkZooCard($answer){
+
         $usersay = $answer->getText();
         $value = preg_replace('/\s+|-+|\/+/', ' ',  $usersay);
         $this->fordate = $this->validateDate($value);

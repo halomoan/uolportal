@@ -28,6 +28,8 @@ class HelpConversation  extends Conversation
 
         $this->ask($question,function($answer){
 
+            /*if ($answer->isInteractiveMessageReply()) {
+            }*/
             $value = $answer->getValue();
 
             if ( ! in_array($value,$this->helplist) ){
