@@ -142,8 +142,8 @@ class HRConversation  extends Conversation
         // Reply message object
         $this->getBot()->reply($message);
 
-       $this->askForImages('If you want to change, please send me the new photo now',function($image){
-            $this->say('Thank you');
+       $this->askForImages('If you want to change, please send me the new photo now',function($images){
+            $this->say('Thank you ' . count($images) . ' images');
        });
 
     }
