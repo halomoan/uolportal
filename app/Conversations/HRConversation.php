@@ -17,6 +17,7 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 use Exception;
 use App\ZooCard;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class HRConversation  extends Conversation
 {
@@ -144,8 +145,44 @@ class HRConversation  extends Conversation
 
        $this->askForImages('If you want to change, please send me the new photo now',function($images){
 
-            dd($images);
-            //$this->say('Thank you ' . count($images) . ' images');
+
+
+           foreach($images as $image) {
+               $data = $image->getUrl();
+               $pos  = strpos($data, ';');
+               $type = explode(':', substr($data, 0, $pos))[1];
+
+               $ext = '.jpg';
+
+               switch($type) {
+                   case 'image/jpeg':
+                        $ext = '.jpg';
+                       break;
+                   case 'image/png':
+                       $ext = '.png';
+                       break;
+                   case 'image/bmp':
+                       $ext = '.bmp';
+                       break;
+               }
+
+
+               $encodedData = str_replace(' ','+',$data);
+               $encodedData =  substr($encodedData,strpos($encodedData,",")+1);
+               $avatarName = Auth::user()->name . $ext;
+
+               if(Storage::disk('public')->put('avatars/' . $avatarName ,  base64_decode($encodedData))) {
+                   $user = Auth::user();
+
+                   $user->userprofile->avatar = $avatarName;
+                   $user->userprofile->save();
+
+                   $this->say('Your photo has been successfully changed. Please refresh this page');
+               }else{
+                   $this->say('Something is wrong. We can\'t change your photo');
+               }
+           }
+
 
 
        },function(){
