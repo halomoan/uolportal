@@ -143,7 +143,14 @@ class HRConversation  extends Conversation
         $this->getBot()->reply($message);
 
        $this->askForImages('If you want to change, please send me the new photo now',function($images){
-            $this->say('Thank you ' . count($images) . ' images');
+
+            dd($images);
+            //$this->say('Thank you ' . count($images) . ' images');
+
+
+       },function(){
+           $this->say('Ummm this does not look like a valid image to me.');
+           $this->repeat();
        });
 
     }
