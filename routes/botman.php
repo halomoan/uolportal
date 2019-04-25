@@ -22,12 +22,20 @@ $botman->hears('hr|about hr',function($bot) {
     $bot->startConversation(new \App\Conversations\HRConversation());
 });
 
+//$botman->hear('I want to (book)|(reserve) singapore zoo card',function($bot){
+//
+//});
+
 $botman->hears('exit|stop|quit|bye', function($bot){
    $bot->reply('Ok. We stop our conversation.');
 })->stopsConversation();
 
 
-$botman->hears('cancel', function($bot){
-    $bot->reply('Ok. The request has been cancelled');
-})->stopsConversation();
+//$botman->hears('cancel', function($bot){
+//    $bot->reply('Ok. The request has been cancelled');
+//})->stopsConversation();
 
+
+$botman->fallback(function($bot){
+   $bot->reply('Hmm...I quite don\'t understand what is your command. You can type \'help\' to get help list');
+});
