@@ -79,17 +79,25 @@ class HRConversation  extends Conversation
             }
         }
 
+        if ($idx > $this->maxmenu) {
+            array_unshift($buttons, Button::create('Less..')->value('less'));
+        }
+
+        if ($idx < count($this->helplist)) {
+            array_push($buttons, Button::create('More..')->value('more'));
+        }
+
 
         $question = Question::create('HR Matters')
             ->addButtons($buttons);
         $this->ask($question, function ($answer) {
             $usersay = $answer->getText();
-            /*if ( ! ( array_key_exists($usersay,$this->helplist) && $usersay != 'more' )  ){
 
+            if ( !( strcmp($usersay, 'more') == 0  || strcmp($usersay, 'less') == 0  || array_key_exists($usersay,$this->helplist))) {
                 $this->say('I cannot help on that. Please pick one from the list on below.' . $usersay);
 
                 return $this->repeat();
-            }*/
+            }
 
             switch($usersay){
                 case 'zoocard':
