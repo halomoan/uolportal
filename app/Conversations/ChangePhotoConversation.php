@@ -17,12 +17,24 @@ use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 class ChangePhotoConversation extends Conversation
 {
 
+    protected $user;
     protected $stopsConversation = false;
+
+
+    function  __construct($user = null) {
+
+        if (Auth::guest()){
+            $this->user = $user;
+        } else {
+            $this->user = Auth::user();
+        }
+    }
 
     public function run()
     {
-        $user = Auth::user();
-        $attachment = new Image("/storage/avatars/" . $user->userprofile->avatar);
+
+
+        $attachment = new Image("/storage/avatars/" . $this->user->userprofile->avatar);
         // Build message object
         $message = OutgoingMessage::create('This is your current photo')
             ->withAttachment($attachment);
@@ -56,13 +68,13 @@ class ChangePhotoConversation extends Conversation
 
                 $encodedData = str_replace(' ','+',$data);
                 $encodedData =  substr($encodedData,strpos($encodedData,",")+1);
-                $avatarName = Auth::user()->name . $ext;
+                $avatarName = $this->user->name . $ext;
 
                 if(Storage::disk('public')->put('avatars/' . $avatarName ,  base64_decode($encodedData))) {
-                    $user = Auth::user();
 
-                    $user->userprofile->avatar = $avatarName;
-                    $user->userprofile->save();
+
+                    $this->user->userprofile->avatar = $avatarName;
+                    $this->user->userprofile->save();
 
                     $this->say('Your photo has been successfully changed. Please refresh this page');
                 }else{

@@ -18,7 +18,14 @@ use Exception;
 class HRConversation  extends Conversation
 {
 
-    protected $helplist = array('singaporezoocard','hrdpolicy','changephoto');
+    protected $helplist = array(
+        'zoocard' => 'To Book The Singapore Zoo Card',
+        'changephoto' => 'To Change My Photo',
+        'hrdpolicy' => 'To Ask HRD Policy',
+        'gardencard' => 'To Book Garden By The Bay Card'
+    );
+    protected $helpidx = 0;
+    protected $maxmenu = 3;
     protected $fordate;
 
     public function run()
@@ -33,7 +40,7 @@ class HRConversation  extends Conversation
             }elseif(preg_match('/I want to (change)|(update) my photo/i', $usersay)){
                 $this->askChangePhoto();
             }else{
-                $this->say('you said: ' . $usersay);
+               $this->repeat('If you are not sure, you may type \'help\' for menu');
             }
 
         });
@@ -42,33 +49,64 @@ class HRConversation  extends Conversation
 
     }
 
-    protected function showHelp()
+    protected function showHelp($start = 0)
     {
+        $idx = 0;
+        $noofmenu = 0;
+        $buttons = array();
+
+
+
+        $this->helpidx = $this->helpidx + $start;
+
+
+        if ($this->helpidx <= 0) {
+            $this->helpidx = 0;
+        } elseif($this->helpidx >= count($this->helplist)) {
+            $this->helpidx = $this->helpidx - $start;
+        }
+
+
+
+        foreach($this->helplist as $key => $value){
+
+
+            if(++$idx > $this->helpidx) {
+                array_push($buttons, Button::create($value)->value($key));
+                if (++$noofmenu >= $this->maxmenu){
+                    break;
+                }
+            }
+        }
+
+
         $question = Question::create('HR Matters')
-            ->addButtons([
-                Button::create('To Book The Singapore Zoo Card')->value('singaporezoocard'),
-                Button::create('To Change My Photo')->value('changephoto'),
-                Button::create('To Ask HRD Policy')->value('hrdpolicy')
-            ]);
+            ->addButtons($buttons);
         $this->ask($question, function ($answer) {
             $usersay = $answer->getText();
-            if ( ! in_array($usersay,$this->helplist) ){
+            /*if ( ! ( array_key_exists($usersay,$this->helplist) && $usersay != 'more' )  ){
 
-                $this->say('I cannot help on that. Please pick one from the list on below.');
+                $this->say('I cannot help on that. Please pick one from the list on below.' . $usersay);
 
                 return $this->repeat();
-            }
+            }*/
 
             switch($usersay){
-                case 'singaporezoocard':
+                case 'zoocard':
                     $this->askSingaporeZoo(); break;
                 case 'changephoto':
                     $this->askChangePhoto(); break;
+                case 'more':
+                    $this->showHelp($this->maxmenu); break;
+                case 'less':
+                    $this->showHelp(-1 * $this->maxmenu); break;
 
             }
 
 
         });
+
+        return true;
     }
 
     protected function askSingaporeZoo(){

@@ -57,6 +57,19 @@
     </script>
 
     <script src="{{ asset('js/app.js') }}" defer></script>
+
+    <script>
+        var botmanWidget = {
+            aboutText: "{{Auth::guest() ? 'Guest' : Auth::user()->name}}",
+            title: "UOL ChatBot",
+            introMessage: "Welcome to UOLChatBot",
+            userId: "{{Auth::guest() ? 'Guest' : Auth::user()->name}}"
+        };
+
+    </script>
+    <script src='/js/widget.js'></script>
+
+
     @if(auth()->check())
         @include('inc.javascript')
     @endif

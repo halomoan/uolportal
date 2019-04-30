@@ -18,8 +18,17 @@ use App\ZooCard;
 class ZooCardConversation extends Conversation
 {
 
+    protected $user;
     protected $stopsConversation = false;
 
+    function  __construct($user = null) {
+
+        if (Auth::guest()){
+            $this->user = $user;
+        } else {
+            $this->user = Auth::user();
+        }
+    }
 
     public function run()
     {
@@ -67,7 +76,7 @@ class ZooCardConversation extends Conversation
         $this->ask('You choose <b>' . date('D, d M Y',$this->fordate) . '</b>.Please type \'confirm\' to do confirmation or \'change\' to do change', function($answer){
             $usersay = $answer->getText();
             if ($usersay == 'confirm') {
-                Zoocard::create(['user_id' => Auth::User()->id, 'fordate' => date('Y-m-d',$this->fordate), 'status' => '']);
+                Zoocard::create(['user_id' => $this->user->id, 'fordate' => date('Y-m-d',$this->fordate), 'status' => '']);
 
 
                 $this->say('Thank you, You have successfully booked the Singapore Zoo Card on <b>' . date('D, d M Y',$this->fordate) . '</b>. Remember to collect the card from HR.');

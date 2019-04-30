@@ -3,14 +3,37 @@
 $botman = resolve('botman');
 
 $botman->hears('(Hi)|(Hello)|(Helo)', function ($bot) {
-    $username = Auth::user()->name;
-    $bot->reply('Hello '. $username . '! How can I help you?');
+
+    if (Auth::guest()) {
+        $bot->reply('Hello there. How can I help you?');
+    } else {
+        $username = Auth::user()->name;
+        $bot->reply('Hello '. $username . '! How can I help you?');
+    }
+
 });
 
-$botman->hears('I(.*)good', function ($bot) {
+$botman->group(['recipient' => 'Guest'], function($bot) {
+    $bot->hears('i want (to reserve)|(to book) singapore zoo (card)', function ($bot) {
 
-    $bot->reply('Great to hear that. How can I help you?');
+        $bot->userStorage()->save([
+            'action' => 'zoocard'
+        ]);
+
+        $bot->startConversation(new \App\Conversations\WhoAreYouConversation());
+    });
+
+    $bot->hears('I want to (change)|(update) my photo', function ($bot) {
+
+        $bot->userStorage()->save([
+            'action' => 'myphoto'
+        ]);
+
+        $bot->startConversation(new \App\Conversations\WhoAreYouConversation());
+    });
+
 });
+
 
 $botman->hears('help[s]?$', function ($bot) {
 
@@ -22,9 +45,9 @@ $botman->hears('hr|about hr',function($bot) {
     $bot->startConversation(new \App\Conversations\HRConversation());
 });
 
-//$botman->hear('I want to (book)|(reserve) singapore zoo card',function($bot){
-//
-//});
+$botman->hears('i want (to reserve)|(to book) singapore zoo (card)',function($bot){
+    $bot->startConversation(new \App\Conversations\ZooCardConversation());
+});
 
 $botman->hears('exit|stop|quit|bye', function($bot){
    $bot->reply('Ok. We stop our conversation.');
