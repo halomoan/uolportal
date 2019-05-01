@@ -8,21 +8,24 @@
 
 namespace App\Conversations;
 
-use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Exception;
-use App\ZooCard;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+
 
 class HRConversation  extends Conversation
 {
 
-    protected $helplist = array('singaporezoocard','hrdpolicy','changephoto');
+    protected $helplist = array(
+        'zoocard' => 'To Book The Singapore Zoo Card',
+        'changephoto' => 'To Change My Photo',
+        'hrdpolicy' => 'To Ask HRD Policy',
+        'gardencard' => 'To Book Garden By The Bay Card'
+    );
+    protected $helpidx = 0;
+    protected $maxmenu = 3;
     protected $fordate;
 
     public function run()
@@ -32,8 +35,12 @@ class HRConversation  extends Conversation
 
             if ($usersay == 'help') {
                 $this->showHelp();
-            }elseif(preg_match('/I want to (book)|(reserve) singapore zoo card/i', $usersay)){
+            }elseif(preg_match('/I want to (book)|(reserve) (the) singapore zoo (card)/i', $usersay)){
                 $this->askSingaporeZoo();
+            }elseif(preg_match('/I want to (change)|(update) my photo/i', $usersay)){
+                $this->askChangePhoto();
+            }else{
+               $this->repeat('If you are not sure, you may type \'help\' for menu');
             }
 
         });
@@ -42,166 +49,85 @@ class HRConversation  extends Conversation
 
     }
 
-    protected function showHelp()
+    protected function showHelp($start = 0)
     {
+        $idx = 0;
+        $noofmenu = 0;
+        $buttons = array();
+
+
+
+        $this->helpidx = $this->helpidx + $start;
+
+
+        if ($this->helpidx <= 0) {
+            $this->helpidx = 0;
+        } elseif($this->helpidx >= count($this->helplist)) {
+            $this->helpidx = $this->helpidx - $start;
+        }
+
+
+
+        foreach($this->helplist as $key => $value){
+
+
+            if(++$idx > $this->helpidx) {
+                array_push($buttons, Button::create($value)->value($key));
+                if (++$noofmenu >= $this->maxmenu){
+                    break;
+                }
+            }
+        }
+
+        if ($idx > $this->maxmenu) {
+            array_unshift($buttons, Button::create('Less..')->value('less'));
+        }
+
+        if ($idx < count($this->helplist)) {
+            array_push($buttons, Button::create('More..')->value('more'));
+        }
+
+
         $question = Question::create('HR Matters')
-            ->addButtons([
-                Button::create('To Book The Singapore Zoo Card')->value('singaporezoocard'),
-                Button::create('To Change My Photo')->value('changephoto'),
-                Button::create('To Ask HRD Policy')->value('hrdpolicy')
-            ]);
+            ->addButtons($buttons);
         $this->ask($question, function ($answer) {
             $usersay = $answer->getText();
-            if ( ! in_array($usersay,$this->helplist) ){
 
-                $this->say('I cannot help on that. Please pick one from the list on below.');
+            if ( !( strcmp($usersay, 'more') == 0  || strcmp($usersay, 'less') == 0  || array_key_exists($usersay,$this->helplist))) {
+                $this->say('I cannot help on that. Please pick one from the list on below.' . $usersay);
 
                 return $this->repeat();
             }
 
             switch($usersay){
-                case 'singaporezoocard':
+                case 'zoocard':
                     $this->askSingaporeZoo(); break;
                 case 'changephoto':
                     $this->askChangePhoto(); break;
+                case 'more':
+                    $this->showHelp($this->maxmenu); break;
+                case 'less':
+                    $this->showHelp(-1 * $this->maxmenu); break;
 
             }
 
 
         });
+
+        return true;
     }
 
     protected function askSingaporeZoo(){
 
-        $this->ask('For Singapore Zoo Booking, What is the date?',function($answer){
-
-
-
-            if( $this->checkZooCard($answer)) {
-                $this->confirmZooCard();
-            }
-
-
-        });
+        $this->bot->startConversation(new ZooCardConversation());
     }
-
-
-    private function checkZooCard($answer){
-
-        $usersay = $answer->getText();
-        $value = preg_replace('/\s+|-+|\/+/', ' ',  $usersay);
-        $this->fordate = $this->validateDate($value);
-        if(!$this->fordate){
-            return $this->repeat('Invalid date. Please enter a valid date, like ' . date('d M Y'));
-        } elseif($this->fordate < strtotime("now") ) {
-
-            return $this->repeat('You cannot choose past date, please reenter a future date');
-        }
-
-        $zoocards = Zoocard::where('fordate','=', date('Y-m-d',$this->fordate))->where('status','=','')->first();
-
-        if ($zoocards) {
-            $this->say('The Singapore Zoo card had been reserved by ' . $zoocards->user->name);
-            return $this->repeat('any other date?');
-        } else{
-            return true;
-        }
-    }
-
-    private function confirmZooCard(){
-        $this->ask('You choose <b>' . date('D, d M Y',$this->fordate) . '</b>.Please type \'confirm\' to do confirmation', function($answer){
-            $usersay = $answer->getText();
-            if ($usersay == 'confirm') {
-                Zoocard::create(['user_id' => Auth::User()->id, 'fordate' => date('Y-m-d',$this->fordate), 'status' => '']);
-
-                $this->say('Thank you, You have successfully booked the Singapore Zoo Card on <b>' . date('D, d M Y',$this->fordate) . '</b>. Remember to get the card from HR.');
-                return true;
-
-            } if($usersay == 'change') {
-
-                 $this->ask('Ok. What is the new date?',function($answer){
-
-                     if($this->checkZooCard($answer)) {
-                        $this->confirmZooCard();
-                     }
-                 });
-            }else {
-                $this->repeat("Type 'confirm' to confirm or 'change' to change or 'cancel' to cancel");
-            }
-        });
-    }
-
 
     private function askChangePhoto(){
-        $user = Auth::user();
-        $attachment = new Image("/storage/avatars/" . $user->userprofile->avatar);
-        // Build message object
-        $message = OutgoingMessage::create('This is your current photo')
-            ->withAttachment($attachment);
 
-        // Reply message object
-        $this->getBot()->reply($message);
-
-       $this->askForImages('If you want to change, please send me the new photo now',function($images){
-
-
-
-           foreach($images as $image) {
-               $data = $image->getUrl();
-               $pos  = strpos($data, ';');
-               $type = explode(':', substr($data, 0, $pos))[1];
-
-               $ext = '.jpg';
-
-               switch($type) {
-                   case 'image/jpeg':
-                        $ext = '.jpg';
-                       break;
-                   case 'image/png':
-                       $ext = '.png';
-                       break;
-                   case 'image/bmp':
-                       $ext = '.bmp';
-                       break;
-               }
-
-
-               $encodedData = str_replace(' ','+',$data);
-               $encodedData =  substr($encodedData,strpos($encodedData,",")+1);
-               $avatarName = Auth::user()->name . $ext;
-
-               if(Storage::disk('public')->put('avatars/' . $avatarName ,  base64_decode($encodedData))) {
-                   $user = Auth::user();
-
-                   $user->userprofile->avatar = $avatarName;
-                   $user->userprofile->save();
-
-                   $this->say('Your photo has been successfully changed. Please refresh this page');
-               }else{
-                   $this->say('Something is wrong. We can\'t change your photo');
-               }
-           }
-
-
-
-       },function(){
-           $this->say('Ummm this does not look like a valid image to me.');
-           $this->repeat();
-       });
+        $this->bot->startConversation(new ChangePhotoConversation());
 
     }
 
-    private function validateDate($value){
-
-
-        try {
-            $timestamp = strtotime($value);
-            return $timestamp;
-        } catch (Exception $e) {
-
-        }
-        return false;
-    }
 
     public function stopsConversation(IncomingMessage $message)
     {

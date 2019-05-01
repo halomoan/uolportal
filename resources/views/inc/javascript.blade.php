@@ -50,18 +50,3 @@
 @endif
 
 
-@if(App\Role\RoleChecker::check(Auth::user(),App\Role\UserRole::ROLE_PUBLIC))
-    <script>
-        var botmanWidget = {
-            aboutText: "{{Auth::user()->name}}",
-            title: "UOL ChatBot",
-            introMessage: "Welcome to UOLChatBot",
-            userId: "{{Auth::user()->name}}"
-        };
-
-    </script>
-
-    {{--<script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>--}}
-    <script src='/js/widget.js'></script>
-
-@endif
