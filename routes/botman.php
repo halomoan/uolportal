@@ -18,6 +18,12 @@ $botman->hears('help[s]?$', function ($bot) {
 });
 
 
+
+$botman->hears('I want(.*)singapore zoo(.*)', function ($bot) {
+
+    $bot->startConversation(new \App\Conversations\HRConversation());
+});
+
 $botman->hears('hr|about hr',function($bot) {
     $bot->startConversation(new \App\Conversations\HRConversation());
 });

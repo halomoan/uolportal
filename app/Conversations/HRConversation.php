@@ -109,13 +109,12 @@ class HRConversation  extends Conversation
     }
 
     private function confirmZooCard(){
-        $this->ask('You choose ' . date('D, d M Y',$this->fordate) . '.Please type \'confirm\' to do confirmation', function($answer){
+        $this->ask('You choose <b>' . date('D, d M Y',$this->fordate) . '</b>.Please type \'confirm\' to do confirmation', function($answer){
             $usersay = $answer->getText();
             if ($usersay == 'confirm') {
                 Zoocard::create(['user_id' => Auth::User()->id, 'fordate' => date('Y-m-d',$this->fordate), 'status' => '']);
 
-
-                $this->say('Thank you, You have successfully booked the Singapore Zoo Card on ' . date('D, d M Y',$this->fordate));
+                $this->say('Thank you, You have successfully booked the Singapore Zoo Card on <b>' . date('D, d M Y',$this->fordate) . '</b>. Remember to get the card from HR.');
                 return true;
 
             } if($usersay == 'change') {

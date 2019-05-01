@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\ZooCard;
-use Illuminate\Support\MessageBag;
 
 class ZooCardController extends Controller
 {
@@ -40,7 +39,7 @@ class ZooCardController extends Controller
         })->paginate(2);;*/
 
 
-        return view('zoocard')->with('zoocards',$zoocards);
+        return view('zoocard')->with('zoocards',$zoocards)->with('withsidebar',false);
     }
 
     /**

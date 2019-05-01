@@ -13,8 +13,15 @@
             @auth
             <ul class="navbar-nav mr-auto">
                 @if( App\Role\RoleChecker::check(Auth::user(),App\Role\UserRole::ROLE_HRD) )
-                <li class="nav-item">
-                    <a class="nav-link" href="{{asset('zoocard')}}">Singapore Zoo</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="HRDropmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        HR Department
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="HRDropmenu">
+                        <a class="dropdown-item" href="{{asset('zoocard')}}">Singapore Zoo</a>
+                        <a class="dropdown-item" href="{{asset('attendance')}}">Attendance Organizer</a>
+                    </div>
                 </li>
                 @endif
                     @if(App\Role\RoleChecker::check(Auth::user(),App\Role\UserRole::ROLE_SAPCC))
