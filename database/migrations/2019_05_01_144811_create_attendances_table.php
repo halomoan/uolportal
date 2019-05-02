@@ -16,8 +16,7 @@ class CreateAttendancesTable extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->increments('id');
             $table->char('attendance_id',16)->nullable(false);
-            $table->string('employee_id')->nullable(false);
-            $table->string('employee_id')->nullable(false);
+            $table->char('employee_id',4)->nullable(false);
             $table->timestamps();
         });
     }

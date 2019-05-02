@@ -12,7 +12,7 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
-use Exception;
+use Illuminate\Support\Facades\Auth;
 
 
 class HRConversation  extends Conversation
@@ -35,9 +35,9 @@ class HRConversation  extends Conversation
 
             if ($usersay == 'help') {
                 $this->showHelp();
-            }elseif(preg_match('/I want to (book)|(reserve) (the) singapore zoo (card)/i', $usersay)){
+            }elseif(preg_match('/I want (to book)|(to reserve) singapore zoo(\scard)?/i', $usersay)){
                 $this->askSingaporeZoo();
-            }elseif(preg_match('/I want to (change)|(update) my photo/i', $usersay)){
+            }elseif(preg_match('/I want (to change)|(to update) my photo/i', $usersay)){
                 $this->askChangePhoto();
             }else{
                $this->repeat('If you are not sure, you may type \'help\' for menu');
@@ -119,12 +119,29 @@ class HRConversation  extends Conversation
 
     protected function askSingaporeZoo(){
 
-        $this->bot->startConversation(new ZooCardConversation());
+        $this->bot->userStorage()->save([
+            'action' => 'zoocard'
+        ]);
+        if (Auth::guest()) {
+            $this->bot->startConversation(new WhoAreYouConversation());
+        } else {
+            $user = Auth::user();
+            $this->bot->startConversation(new ZooCardConversation($user));
+        }
     }
 
     private function askChangePhoto(){
 
-        $this->bot->startConversation(new ChangePhotoConversation());
+        $this->bot->userStorage()->save([
+            'action' => 'myphoto'
+        ]);
+
+        if (Auth::guest()) {
+            $this->bot->startConversation(new WhoAreYouConversation());
+        } else {
+            $user = Auth::user();
+            $this->bot->startConversation(new ChangePhotoConversation($user));
+        }
 
     }
 

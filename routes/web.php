@@ -25,6 +25,8 @@ Auth::routes();
 
 Route::group(['middleware' => ['check_user_role:' . \App\Role\UserRole::ROLE_HRD]], function () {
     Route::get('attendance','AttendanceController@index');
+    Route::post('attendance','AttendanceController@store');
+
     Route::get('zoocard','ZooCardController@index');
     Route::get('zoocard/{zoocard}/edit','ZooCardController@edit');
     Route::post('zoocard','ZooCardController@store');
